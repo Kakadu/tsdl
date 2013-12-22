@@ -4,7 +4,7 @@
    tsdl release 0.0.0-18-g2fe4f14
   ---------------------------------------------------------------------------*)
 
-(** Simple DirectMedia Layer (SDL) thin bindings.
+(** SDL thin bindings.
 
     Consult the {{!conventions}binding conventions}, the
     {{!Sdl.coverage}binding coverage} and {{!examples}examples} of
@@ -2396,7 +2396,7 @@ type event_type = int
 type event
 (** {{:http://wiki.libsdl.org/SDL_Event}SDL_Event} *)
 
-(** {!event} accessors and {!event_type} values. *)
+(** {!event} accessors and {!event_type} constants and {{!enum}enumeration}. *)
 module Event : sig
 
   (** {1:event Event} 
@@ -2706,6 +2706,23 @@ module Event : sig
   val window_event_id : window_event_id field 
   val window_data1 : int32 field 
   val window_data2 : int32 field 
+
+  (** {1:enum Event type enum} *) 
+
+  val enum : event_type -> 
+    [ `App_did_enter_background | `App_did_enter_foreground 
+    | `App_low_memory | `App_terminating | `App_will_enter_background 
+    | `App_will_enter_foreground | `Clipboard_update 
+    | `Controller_axis_motion | `Controller_button_down 
+    | `Controller_button_up | `Controller_device_added 
+    | `Controller_device_remapped | `Controller_device_removed 
+    | `Dollar_gesture | `Dollar_record | `Drop_file | `Finger_down 
+    | `Finger_motion | `Finger_up | `Joy_axis_motion | `Joy_ball_motion
+    | `Joy_button_down | `Joy_button_up | `Joy_device_added 
+    | `Joy_device_removed | `Joy_hat_motion | `Key_down | `Key_up 
+    | `Mouse_button_down | `Mouse_button_up | `Mouse_motion 
+    | `Mouse_wheel | `Multi_gesture | `Quit | `Sys_wm_event 
+    | `Text_editing | `Text_input | `Unknown | `User_event | `Window_event ]
 end
 
 val get_event_state : event_type -> toggle_state
