@@ -1,7 +1,7 @@
 (*---------------------------------------------------------------------------
    Copyright (c) 2013 Daniel C. Bünzli. All rights reserved.
    Distributed under the BSD3 license, see license at the end of the file.
-   %%NAME%% release %%VERSION%%
+   tsdl release 0.0.0-18-g2fe4f14
   ---------------------------------------------------------------------------*)
 
 let unsafe_get = Array.unsafe_get
@@ -785,7 +785,7 @@ let pixel_format_enum_to_masks pf =
   let rm, gm, bm, am = ui (), ui (), ui (), ui () in 
   if not (pixel_format_enum_to_masks pf bpp rm gm bm am) then `Error else 
   `Ok (!@ bpp, get rm, get gm, get bm, get am)
-  
+ 
 let set_pixel_format_palette = 
   foreign "SDL_SetPixelFormatPalette" 
     (pixel_format @-> palette @-> returning zero_to_ok)
@@ -812,6 +812,26 @@ let () = seal surface_struct
 type surface = surface_struct ptr
 let surface : surface typ = ptr surface_struct 
 let surface_opt : surface option typ = ptr_opt surface_struct
+
+(* Font *)
+module TTF = struct
+  type _font
+  type font_struct = _font structure
+  let font_struct : font_struct typ = structure "TTF_Font"
+  type font = font_struct ptr
+  let font_opt : font option typ = ptr_opt font_struct
+  let font : font typ = ptr font_struct
+  let open_font = 
+    foreign "TTF_OpenFont"
+      (string @-> int @-> returning (some_to_ok font_opt) )
+  let close_font =
+    foreign "TTF_CloseFont"
+      (font @-> returning void)
+  let render_text_blended =
+    foreign "TTF_RenderText_Blended"
+      (font @-> string @-> color @-> returning (some_to_ok surface_opt))
+
+end
 
 let blit_scaled = 
   (* SDL_BlitScaled is #ifdef'd to SDL_UpperBlitScaled *)
@@ -987,6 +1007,10 @@ let load_bmp file =
   | `Error -> `Error 
   | `Ok rw -> load_bmp_rw rw ~close:true
 
+let img_load =
+  foreign "IMG_Load"
+      (string @-> returning (some_to_ok surface_opt))
+   
 let lock_surface = 
   foreign "SDL_LockSurface" (surface @-> returning zero_to_ok)
 
@@ -1166,6 +1190,10 @@ let get_renderer =
   foreign "SDL_GetRenderer" 
     (window @-> returning (some_to_ok renderer_opt))
 
+let img_load_texture = 
+  foreign "IMG_LoadTexture"
+    (renderer @-> string @-> returning (some_to_ok texture_opt))
+ 
 let get_renderer_info =
   foreign "SDL_GetRendererInfo" 
     (renderer @-> ptr renderer_info @-> returning zero_to_ok)

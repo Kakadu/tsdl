@@ -1,7 +1,7 @@
 (*---------------------------------------------------------------------------
    Copyright 2013 Daniel C. Bünzli. All rights reserved.
    Distributed under the BSD3 license, see license at the end of the file.
-   %%NAME%% release %%VERSION%%
+   tsdl release 0.0.0-18-g2fe4f14
   ---------------------------------------------------------------------------*)
 
 (** Simple DirectMedia Layer (SDL) thin bindings.
@@ -21,7 +21,7 @@
     {ul
     {- {{:http://wiki.libsdl.org/APIByCategory}SDL API}}}  
 
-    {e Release %%VERSION%% — SDL version %%SDLVERSION%% — %%MAINTAINER%% } *)
+    {e Release 0.0.0-18-g2fe4f14 — SDL version 2.0.1 — Daniel Bünzli <daniel.buenzl i\@erratique.ch> } *)
 
 (** {1:sdl SDL} *)
 
@@ -537,6 +537,16 @@ val set_pixel_format_palette : pixel_format -> palette -> unit result
 type surface 
 (** {{:https://wiki.libsdl.org/SDL_Surface}SDL_Surface} *)
 
+module TTF : sig
+        type font 
+        val font_opt : font option Ctypes.typ
+        val font : font Ctypes.typ
+        val open_font : string -> int -> font result
+        val close_font : font -> unit
+        val render_text_blended :
+          font -> string -> color -> surface result
+end
+
 val blit_scaled : src:surface -> rect -> dst:surface -> rect option -> 
   unit result
 (** {{:http://wiki.libsdl.org/SDL_BlitScaled}SDL_BlitScaled} *)
@@ -910,6 +920,9 @@ val create_texture : renderer -> Pixel.format_enum -> Texture.access ->
 val create_texture_from_surface : renderer -> surface -> texture result
 (** {{:http://wiki.libsdl.org/SDL_CreateTextureFromSurface}
     SDL_CreateTextureFromSurface} *)
+
+val img_load_texture : renderer -> string -> texture result
+val img_load : string -> surface result
 
 val destroy_texture : texture -> unit
 (** {{:http://wiki.libsdl.org/SDL_DestroyTexture}SDL_DestroyTexture} *)

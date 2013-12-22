@@ -53,6 +53,8 @@ let () =
   dispatch begin function
   | After_rules ->
       pkg_config_lib ~lib:"sdl2" ~has_lib:"-DHAS_SDL2" ~stublib:"tsdl";
+      pkg_config_lib ~lib:"SDL2_image" ~has_lib:"-DHAS_SDL2_IMAGE" ~stublib:"tsdl"; 
+      pkg_config_lib ~lib:"SDL2_ttf" ~has_lib:"-DHAS_SDL2_TTF" ~stublib:"tsdl"; 
       sdl_consts_build ()
   | _ -> ()
   end
