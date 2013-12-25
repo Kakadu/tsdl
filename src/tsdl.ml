@@ -816,6 +816,7 @@ type surface = surface_struct ptr
 let surface : surface typ = ptr surface_struct 
 let surface_opt : surface option typ = ptr_opt surface_struct
 
+
 (* Font *)
 module TTF = struct
   type _font
@@ -1414,6 +1415,24 @@ let set_render_target =
 let set_render_target r t = 
   let t = match t with None -> null | Some t -> t in 
   set_render_target r t
+
+module SDL_gfx = struct
+
+  let hline_color =
+    foreign "hlineColor"
+      (renderer @-> int @-> int @-> int @-> int32_t @-> returning bool)
+
+  let hline =
+    foreign "hline"
+      (surface @-> int @-> int @-> int @-> returning bool)
+
+  let thickLineRGBA = foreign "thickLineRGBA"
+    (renderer @-> int @-> int @-> int @-> int 
+              @-> int (* width *)
+              @-> uint8_t @-> uint8_t @-> uint8_t @-> uint8_t 
+              @-> returning bool)    
+
+end
 
 (* Textures *) 
 

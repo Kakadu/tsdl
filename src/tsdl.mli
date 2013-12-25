@@ -899,6 +899,15 @@ val set_render_target : renderer -> texture option -> unit result
 
 (** {2:textures {{:http://wiki.libsdl.org/CategoryRender}Textures}} *)
 
+(* GFX *)
+module SDL_gfx : sig
+  val hline_color : renderer -> int -> int -> int -> int32 -> bool
+  val hline : surface -> int -> int -> int -> bool
+  val thickLineRGBA: renderer -> int  -> int  -> int  -> int 
+       -> int 
+       -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 -> bool
+end
+
 module Texture : sig
   type access
   (** {{:https://wiki.libsdl.org/SDL_TextureAccess}SDL_TextureAccess} *)
