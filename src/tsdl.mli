@@ -906,6 +906,23 @@ module SDL_gfx : sig
   val thickLineRGBA: renderer -> int  -> int  -> int  -> int 
        -> int 
        -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 -> bool
+
+  val filledTrigonColor: renderer -> int -> int -> int -> int -> int -> int 
+       -> Unsigned.uint32 -> bool 
+  val filledTrigonRGBA : renderer -> int -> int -> int -> int -> int -> int 
+       -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 
+       -> bool
+  val pieRGBA: renderer -> int -> int -> int -> int -> int
+       -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8
+       -> bool
+
+  val filledPieRGBA: renderer -> int -> int -> int -> int -> int
+       -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8
+       -> bool
+
+  val filledPolygonRGBA: renderer -> (int*int) list 
+       -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8 -> Unsigned.uint8
+       -> bool
 end
 
 module Texture : sig

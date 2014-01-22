@@ -1417,7 +1417,7 @@ let set_render_target r t =
   set_render_target r t
 
 module SDL_gfx = struct
-
+  (* TODO: returning bool -> returning zero_to_ok *)
   let hline_color =
     foreign "hlineColor"
       (renderer @-> int @-> int @-> int @-> int32_t @-> returning bool)
@@ -1431,6 +1431,41 @@ module SDL_gfx = struct
               @-> int (* width *)
               @-> uint8_t @-> uint8_t @-> uint8_t @-> uint8_t 
               @-> returning bool)    
+
+  let filledTrigonColor = foreign "filledTrigonColor"
+    (renderer @-> int      @-> int
+              @-> int      @-> int
+              @-> int      @-> int
+              @-> uint32_t @-> returning bool)
+
+  let filledTrigonRGBA = foreign "filledTrigonRGBA"
+    (renderer @-> int      @-> int
+              @-> int      @-> int
+              @-> int      @-> int
+              @-> uint8_t  @-> uint8_t @-> uint8_t @-> uint8_t 
+              @-> returning bool)
+  
+  let pieRGBA = foreign "pieRGBA"
+    (renderer @-> int16_t @-> int16_t @-> int16_t @-> int16_t @-> int16_t
+              @-> uint8_t @-> uint8_t @-> uint8_t @-> uint8_t 
+              @-> returning bool)
+ 
+  let filledPieRGBA = foreign "filledPieRGBA"
+    (renderer @-> int16_t @-> int16_t @-> int16_t @-> int16_t @-> int16_t
+              @-> uint8_t @-> uint8_t @-> uint8_t @-> uint8_t 
+              @-> returning bool)
+ 
+  let filledPolygonRGBA' = foreign "filledPolygonRGBA"
+    (renderer @-> ptr void @-> ptr void @-> int 
+              @-> uint8_t @-> uint8_t @-> uint8_t @-> uint8_t 
+              @-> returning bool) 
+
+  let filledPolygonRGBA renderer ps r g b a =
+    let count = List.length ps in
+    let arrx = Array.of_list int16_t (List.map fst ps) in
+    let arry = Array.of_list int16_t (List.map snd ps) in
+    filledPolygonRGBA' renderer 
+      (to_voidp (Array.start arrx)) (to_voidp (Array.start arry)) count r g b a
 
 end
 
