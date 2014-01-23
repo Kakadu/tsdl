@@ -537,16 +537,6 @@ val set_pixel_format_palette : pixel_format -> palette -> unit result
 type surface 
 (** {{:https://wiki.libsdl.org/SDL_Surface}SDL_Surface} *)
 
-module TTF : sig
-        type font 
-        val font_opt : font option Ctypes.typ
-        val font : font Ctypes.typ
-        val open_font : string -> int -> font result
-        val close_font : font -> unit
-        val render_text_blended :
-          font -> string -> color -> surface result
-end
-
 val blit_scaled : src:surface -> rect -> dst:surface -> rect option -> 
   unit result
 (** {{:http://wiki.libsdl.org/SDL_BlitScaled}SDL_BlitScaled} *)
@@ -3293,6 +3283,21 @@ type power_info =
 
 val get_power_info : unit -> power_info
 (** {{:http://wiki.libsdl.org/SDL_GetPowerInfo}SDL_GetPowerInfo} *)
+
+module TTF : sig
+  type font 
+  val init : unit -> unit result
+  val was_init : unit -> bool
+  val open_font : string -> int -> font result
+  val close_font : font -> unit
+  val render_text_blended :
+    font -> string -> color -> surface result
+  val render_utf8_blended :
+    font -> string -> color -> surface result
+  val render_unicode_blended :
+    font -> string -> color -> surface result
+  val size_utf8 : font -> string -> (int * int) result
+end
 
 (**     {1:coverage Binding Coverage}
 

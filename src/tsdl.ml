@@ -816,7 +816,7 @@ type surface = surface_struct ptr
 let surface : surface typ = ptr surface_struct 
 let surface_opt : surface option typ = ptr_opt surface_struct
 
-
+(*
 (* Font *)
 module TTF = struct
   type _font
@@ -836,6 +836,7 @@ module TTF = struct
       (font @-> string @-> color @-> returning (some_to_ok surface_opt))
 
 end
+*)
 
 let blit_scaled = 
   (* SDL_BlitScaled is #ifdef'd to SDL_UpperBlitScaled *)
@@ -4694,8 +4695,47 @@ let get_power_info () =
   let pi_pct = match !@ pct with -1 -> None | pct -> Some pct in 
   { pi_state; pi_secs; pi_pct }
 
+module TTF = struct
+  (* copy-and-past of Vu Ngoc San's code *)
+  type _font
+  type font_struct = _font structure
+  let font_struct : font_struct typ = structure "TTF_Font"
+  type font = font_struct ptr
+  let font_opt : font option typ = ptr_opt font_struct
+  let font : font typ = ptr font_struct
+  let init =
+    foreign "TTF_Init"
+      (void @-> returning zero_to_ok)
+  let was_init =
+    foreign "TTF_WasInit"
+      (void @-> returning bool)
+  let open_font =
+    foreign "TTF_OpenFont"
+      (string @-> int @-> returning (some_to_ok font_opt) )
+  let close_font =
+    foreign "TTF_CloseFont"
+      (font @-> returning void)
+  let render_text_blended =
+    foreign "TTF_RenderText_Blended"
+      (font @-> string @-> color @-> returning (some_to_ok surface_opt))
+  let render_utf8_blended =
+    foreign "TTF_RenderUTF8_Blended"
+      (font @-> string @-> color @-> returning (some_to_ok surface_opt))
+  let render_unicode_blended =
+    foreign "TTF_RenderUNICODE_Blended"
+      (font @-> string @-> color @-> returning (some_to_ok surface_opt))
+  let size_utf8 =
+    foreign "TTF_SizeUTF8"
+      (font @-> string @-> ptr int @-> ptr int @-> returning zero_to_ok)
+  let size_utf8 f s =
+    let w = allocate int 0 in
+    let h = allocate int 0 in
+    match size_utf8 f s w h with
+      | `Ok () -> `Ok (!@ w, !@ h) | `Error -> `Error
 end
- 
+
+end
+
 (*---------------------------------------------------------------------------
    Copyright (c) 2013 Daniel C. Bünzli.
    All rights reserved.
